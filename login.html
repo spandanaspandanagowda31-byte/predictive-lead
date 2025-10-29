@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animated Login</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    /* Animated Gradient Background */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(270deg, #1E3A8A, #2563EB, #1E90FF, #3B82F6);
+      background-size: 800% 800%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Login Card */
+    .login-container {
+      background-color: #1F2937;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      width: 380px;
+      text-align: center;
+      color: #F3F4F6;
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-container h2 {
+      color: #1E90FF;
+      margin-bottom: 10px;
+    }
+
+    .login-container p {
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #4B5563;
+      background-color: #374151;
+      color: #F3F4F6;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 8px;
+      transform: scale(1.1);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .actions a {
+      color: #1E90FF;
+      text-decoration: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #1E90FF;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 15px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #1B82E3;
+    }
+
+    .social-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .social-buttons button {
+      width: 50%;
+      background-color: #3B82F6;
+      font-size: 14px;
+    }
+
+    .theme-toggle {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    /* Dark mode for card */
+    .theme-dark .login-container {
+      background-color: #1F2937;
+      color: #F3F4F6;
+    }
+
+    .theme-dark input[type="email"], .theme-dark input[type="password"] {
+      background-color: #374151;
+      color: #F3F4F6;
+      border: 1px solid #4B5563;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h2>Welcome Back!</h2>
+    <p>Login to access your Predictive Dashboard</p>
+
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+
+      <div class="actions">
+        <label><input type="checkbox" id="remember"> Remember me</label>
+        <a href="#">Forgot Password?</a>
+      </div>
+
+      <button type="submit">Login</button>
+
+      <div class="social-buttons">
+        <button type="button" onclick="alert('Login with Google')">Google</button>
+        <button type="button" onclick="alert('Login with LinkedIn')">LinkedIn</button>
+      </div>
+
+      <p>Don't have an account? <a href="#">Sign Up</a></p>
+
+      <div class="theme-toggle">
+        <label><input type="checkbox" id="themeToggle"> Dark Mode</label>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const themeToggle = document.getElementById('themeToggle');
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value || 'guest';
+      // Directly mark user as logged in and navigate to home (no auth)
+      localStorage.setItem('leadAgentUser', JSON.stringify({ email }));
+      window.location.href = 'home.html';
+    });
+
+    themeToggle.addEventListener('change', () => {
+      document.body.classList.toggle('theme-dark', themeToggle.checked);
+    });
+  </script>
+
+</body>
+</html>

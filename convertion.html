@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conversion Dashboard</title>
+  <style>
+    /* HEADER */
+    .site-header {
+      background: #0d1117;
+      color: #fff;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .brand { 
+      font-weight: 700; 
+      letter-spacing: 0.6px; 
+    }
+
+    nav a {
+      color: #cfd8e3;
+      text-decoration: none;
+      margin-left: 16px;
+      padding: 8px 10px;
+      border-radius: 6px;
+    }
+
+    nav a.active, nav a:hover { 
+      background: #1f6feb; 
+      color: #fff; 
+    }
+
+    /* BODY & CONTAINER */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #F3F4F6; /* light background */
+      margin: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .conversion-container {
+      max-width: 1000px;
+      margin: auto;
+      background: #1F2937; /* card background matching dashboard */
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      color: #F3F4F6;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #1E90FF; /* primary blue */
+    }
+
+    /* CONTROLS */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .controls input, .controls select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #374151;
+      min-width: 150px;
+      background-color: #374151;
+      color: #F3F4F6;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* TABLE STYLING */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #374151;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    th {
+      background-color: #1E90FF; /* primary blue */
+      color: white;
+      cursor: pointer;
+    }
+
+    tr:hover {
+      background-color: #374151;
+    }
+
+    /* STATUS */
+    .status {
+      padding: 5px 10px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      display: inline-block;
+      min-width: 90px;
+    }
+
+    .converted {
+      background-color: #10B981; /* green success */
+    }
+
+    .not-converted {
+      background-color: #EF4444; /* red failure */
+    }
+
+    /* PROGRESS BAR */
+    .progress-bar {
+      height: 12px;
+      background: #374151;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .progress {
+      height: 100%;
+      background-color: #1E90FF; /* primary blue */
+      border-radius: 6px 0 0 6px;
+    }
+
+    /* ACTION BUTTONS */
+    button.action-btn {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 6px;
+      background-color: #3B82F6; /* secondary blue */
+      color: #fff;
+      cursor: pointer;
+      margin-right: 5px;
+      transition: background 0.3s;
+    }
+
+    button.action-btn:hover {
+      background-color: #2563EB; /* darker hover */
+    }
+
+    /* DARK MODE */
+    .theme-dark body {
+      background-color: #111827;
+    }
+
+    .theme-dark .conversion-container {
+      background-color: #1F2937;
+      color: #F3F4F6;
+    }
+
+    .theme-dark .controls input, 
+    .theme-dark .controls select {
+      background-color: #374151;
+      color: #F3F4F6;
+      border: 1px solid #4B5563;
+    }
+
+    .theme-dark tr:hover {
+      background-color: #374151;
+    }
+
+    .theme-dark .progress {
+      background-color: #1E90FF;
+    }
+
+    .theme-dark .status.converted {
+      background-color: #10B981;
+    }
+
+    .theme-dark .status.not-converted {
+      background-color: #EF4444;
+    }
+
+    .theme-dark button.action-btn {
+      background-color: #3B82F6;
+    }
+
+    .theme-dark button.action-btn:hover {
+      background-color: #2563EB;
+    }
+
+    @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+      }
+      th, td {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">Lead Agent</div>
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="lead.html">Leads</a>
+      <a href="convertion.html" class="active">Conversions</a>
+      <a href="settings.html">Settings</a>
+    </nav>
+  </header>
+
+<div class="conversion-container">
+  <h2>Conversion Section</h2>
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Search by name or email">
+    <select id="sortSelect">
+      <option value="none">Sort by Probability</option>
+      <option value="high">High → Low</option>
+      <option value="low">Low → High</option>
+    </select>
+    <label>
+      <input type="checkbox" id="themeToggle"> Dark Mode
+    </label>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Interactions</th>
+        <th>Conversion Probability</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="conversionTable">
+      <!-- Dynamic rows -->
+    </tbody>
+  </table>
+</div>
+
+<script>
+  // Check if user is logged in
+  if (!localStorage.getItem('leadAgentUser')) {
+    location.href = 'index.html';
+  }
+
+  const leads = [
+    {name: "Alice Johnson", email: "alice@example.com", interactions: 5, probability: 80},
+    {name: "Bob Smith", email: "bob@example.com", interactions: 2, probability: 30},
+    {name: "Charlie Lee", email: "charlie@example.com", interactions: 8, probability: 95},
+    {name: "Diana Prince", email: "diana@example.com", interactions: 3, probability: 45},
+    {name: "Ethan Hunt", email: "ethan@example.com", interactions: 7, probability: 70},
+  ];
+
+  const tableBody = document.getElementById('conversionTable');
+  const searchInput = document.getElementById('searchInput');
+  const sortSelect = document.getElementById('sortSelect');
+  const themeToggle = document.getElementById('themeToggle');
+
+  function renderTable(data) {
+    tableBody.innerHTML = '';
+    data.forEach(lead => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${lead.name}</td>
+        <td>${lead.email}</td>
+        <td>${lead.interactions}</td>
+        <td>
+          ${lead.probability}%
+          <div class="progress-bar"><div class="progress" style="width:${lead.probability}%"></div></div>
+        </td>
+        <td><span class="status ${lead.probability >= 50 ? 'converted' : 'not-converted'}">
+          ${lead.probability >= 50 ? 'Converted' : 'Not Converted'}
+        </span></td>
+        <td>
+          <button class="action-btn" onclick="alert('Email sent to ${lead.name}')">Email</button>
+          <button class="action-btn" onclick="alert('Follow up for ${lead.name}')">Follow Up</button>
+        </td>
+      `;
+      tableBody.appendChild(row);
+    });
+  }
+
+  renderTable(leads);
+
+  searchInput.addEventListener('input', () => {
+    const searchText = searchInput.value.toLowerCase();
+    const filtered = leads.filter(lead => 
+      lead.name.toLowerCase().includes(searchText) || 
+      lead.email.toLowerCase().includes(searchText)
+    );
+    renderTable(filtered);
+  });
+
+  sortSelect.addEventListener('change', () => {
+    let sorted = [...leads];
+    if(sortSelect.value === 'high') {
+      sorted.sort((a,b) => b.probability - a.probability);
+    } else if(sortSelect.value === 'low') {
+      sorted.sort((a,b) => a.probability - b.probability);
+    }
+    renderTable(sorted);
+  });
+
+  themeToggle.addEventListener('change', () => {
+    document.body.classList.toggle('theme-dark', themeToggle.checked);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — Lead Agent</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      color: #111;
+    }
+
+    header.site-header {
+      background: #0d1117;
+      color: #fff;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .brand { font-weight: 700; letter-spacing: 0.6px; }
+
+    nav a {
+      color: #cfd8e3;
+      text-decoration: none;
+      margin-left: 16px;
+      padding: 8px 10px;
+      border-radius: 6px;
+    }
+
+    nav a.active, nav a:hover { background: #1f6feb; color: #fff; }
+
+    .container {
+      max-width: 920px;
+      margin: 28px auto;
+      padding: 0 20px;
+    }
+
+    .settings-panel {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+    }
+
+    .settings-card {
+      background: #fff;
+      padding: 22px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+
+    h2 { margin-top: 0; }
+
+    .setting-item { margin-bottom: 16px; }
+    .setting-item label { display:block; margin-bottom:6px; font-weight:600; }
+       .setting-item select { width:100%; padding:8px; border-radius:8px; border:1px solid #ddd; }
+
+    .right-card p { margin: 10px 0; }
+    .danger { background: #ffecec; border:1px solid #ffbcbc; }
+
+    .actions { display:flex; gap:10px; }
+    .btn { padding:10px 14px; border-radius:8px; border:none; cursor:pointer; }
+    .btn-primary { background:#0f6df6; color:#fff; }
+    .btn-ghost { background:#f3f4f6; }
+    .btn-danger { background:#e63946; color:#fff; }
+
+    .footer-note { font-size:13px; color:#666; margin-top:8px; }
+
+   x) {
+      .settings-panel { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">Lead Agent</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="lead.html">Leads</a>
+      <a href="settings.html" class="active">Settings</a>
+      <a href="convertion.html" class="active">convertion</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="settings-panel">
+      <div class="settings-card">
+        <h2>General Settings</h2>
+ 
+
+   
+        <div class="setting-item">
+          <label>Theme</label>
+          <label><input type="checkbox" id="themeToggle"> Enable Dark Mode</label>
+        </div>
+
+        <hr>
+
+        <h3>Notifications</h3>
+        <div class="setting-item">
+          <label><input type="checkbox" id="notifyAll"> Email Notifications</label>
+        </div>
+        <div class="setting-item">
+          <label><input type="checkbox" id="notifyLeads"> New Lead Alerts</label>
+        </div>
+
+        <hr>
+
+        <h3>Lead & Prediction</h3>
+        <div class="setting-item">
+          <label for="leadFilter">Show Leads</label>
+          <select id="leadFilter">
+            <option value="all">All Leads</option>
+            <option value="high">High Engagement</option>
+            <option value="recent">Recent Leads</option>
+            <option value="unconverted">Unconverted</option>
+          </select>
+        </div>
+
+        <div class="setting-item">
+          <label for="threshold">Prediction Threshold: <span id="thresholdValue">50%</span></label>
+          <input type="range" id="threshold" min="0" max="100" value="50">
+        </div>
+
+        <div class="setting-item">
+          <button id="saveBtn" class="btn btn-primary">Save Settings</button>
+        </div>
+      </div>
+
+      <aside class="settings-card right-card">
+        <h3>Privacy & Account</h3>
+        <div class="setting-item">
+          <label><input type="checkbox" id="dataShare"> Allow sharing anonymized data</label>
+        </div>
+
+        <div class="setting-item">
+          <label for="language">Language</label>
+          <select id="language">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="hi">हिन्दी</option>
+          </select>
+        </div>
+
+        <div class="setting-item">
+          <p class="footer-note">Account actions:</p>
+          <div class="actions">
+            <button onclick="location.href='index.html'" class="btn btn-ghost">Logout</button>
+            <button id="deleteAccount" class="btn btn-danger">Delete Account</button>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;" class="setting-item danger">
+          <p style="margin:8px 0;">Danger zone: deleting your account will remove all local data. This is irreversible here (example page).</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // Elements
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    const threshold = document.getElementById('threshold');
+    const thresholdValue = document.getElementById('thresholdValue');
+    const saveBtn = document.getElementById('saveBtn');
+
+    // Load saved settings from localStorage
+    function loadSettings() {
+      try {
+        const s = JSON.parse(localStorage.getItem('leadAgentSettings') || '{}');
+        if (s.name) document.getElementById('name').value = s.name;
+        if (s.email) document.getElementById('email').value = s.email;
+        themeToggle.checked = !!s.darkMode;
+        document.getElementById('notifyAll').checked = !!s.notifyAll;
+        document.getElementById('notifyLeads').checked = !!s.notifyLeads;
+        document.getElementById('leadFilter').value = s.leadFilter || 'all';
+        threshold.value = s.predictionThreshold || 50;
+        thresholdValue.textContent = threshold.value + '%';
+        document.getElementById('dataShare').checked = !!s.dataShare;
+        document.getElementById('language').value = s.language || 'en';
+        body.classList.toggle('theme-dark', themeToggle.checked);
+      } catch(e) { console.warn('Failed to load settings', e); }
+    }
+
+    // Save settings to localStorage
+    saveBtn.addEventListener('click', () => {
+      const settings = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        darkMode: themeToggle.checked,
+        notifyAll: document.getElementById('notifyAll').checked,
+        notifyLeads: document.getElementById('notifyLeads').checked,
+        leadFilter: document.getElementById('leadFilter').value,
+        predictionThreshold: threshold.value,
+        dataShare: document.getElementById('dataShare').checked,
+        language: document.getElementById('language').value
+      };
+      localStorage.setItem('leadAgentSettings', JSON.stringify(settings));
+      alert('Settings saved.');
+    });
+
+    // Theme toggle
+    themeToggle.addEventListener('change', () => {
+      body.classList.toggle('theme-dark', themeToggle.checked);
+    });
+
+    // Threshold display
+    threshold.addEventListener('input', () => {
+      thresholdValue.textContent = threshold.value + '%';
+    });
+
+    // Delete account (example confirmation)
+    document.getElementById('deleteAccount').addEventListener('click', () => {
+      if (confirm('Are you sure you want to delete your account and local settings?')) {
+        localStorage.removeItem('leadAgentSettings');
+        alert('Local account data removed (example). Redirecting to home.');
+        location.href = 'index.html';
+      }
+    });
+
+    loadSettings();
+  </script>
+</body>
+</html>

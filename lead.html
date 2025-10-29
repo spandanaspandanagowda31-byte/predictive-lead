@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leads | Predictive Lead & Conversion Optimization</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background-color: #0a0f1a;
+      color: white;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    .sidebar {
+      width: 220px;
+      background: #0e1423;
+      height: 100vh;
+      padding-top: 20px;
+      position: fixed;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      color: #00bfff;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .sidebar ul li.active,
+    .sidebar ul li:hover {
+      background: #12203a;
+      border-left: 4px solid #00bfff;
+    }
+
+    .sidebar ul li a {
+      text-decoration: none;
+      color: #cfcfcf;
+      display: block;
+    }
+
+    .main-content {
+      margin-left: 240px;
+      padding: 30px;
+      width: calc(100% - 240px);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    header h1 {
+      font-size: 26px;
+      color: #00bfff;
+      margin-bottom: 25px;
+      text-shadow: 0 0 10px #00bfff;
+    }
+
+    .leads-section {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .lead-card {
+      background: #12203a;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      flex: 1;
+      box-shadow: 0 0 10px rgba(0, 191, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .lead-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(0, 191, 255, 0.5);
+    }
+
+    .number {
+      font-size: 30px;
+      color: #00bfff;
+      margin-top: 10px;
+      text-shadow: 0 0 10px #00bfff;
+    }
+
+    .table-section {
+      background: #12203a;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 191, 255, 0.2);
+      animation: slideUp 0.8s ease;
+    }
+
+    .table-section h2 {
+      color: #00bfff;
+      margin-bottom: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #1c2b45;
+    }
+
+    th {
+      color: #00bfff;
+      font-size: 14px;
+    }
+
+    td {
+      color: #cfcfcf;
+      font-size: 13px;
+    }
+
+    tr:hover {
+      background-color: #1c2b45;
+      transition: 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sidebar">
+    <h2>Agent</h2>
+    <ul>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li class="active"><a href="lead.html">Leads</a></li>
+      <li><a href="#">Conversions</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="index.html">Home</a></li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <header>
+      <h1>Leads Overview</h1>
+    </header>
+
+    <section class="leads-section">
+      <div class="lead-card">
+        <h3>Total Leads</h3>
+        <p class="number" id="totalLeads">0</p>
+      </div>
+
+      <div class="lead-card">
+        <h3>Qualified Leads</h3>
+        <p class="number" id="qualifiedLeads">0</p>
+      </div>
+
+      <div class="lead-card">
+        <h3>Active Leads</h3>
+        <p class="number" id="activeLeads">0</p>
+      </div>
+    </section>
+
+    <section class="table-section">
+      <h2>Lead Details</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Score</th>
+            <th>Status</th>
+            <th>Last Interaction</th>
+          </tr>
+        </thead>
+        <tbody id="leadTable"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    const leadsData = [
+      { name: "Divya K", email: "divya@example.com", score: 89, status: "High", last: "2 days ago" },
+      { name: "Arjun M", email: "arjun@example.com", score: 65, status: "Medium", last: "4 days ago" },
+      { name: "Riya S", email: "riya@example.com", score: 92, status: "High", last: "1 day ago" },
+      { name: "Karan P", email: "karan@example.com", score: 48, status: "Low", last: "6 days ago" },
+      { name: "Sneha L", email: "sneha@example.com", score: 75, status: "Medium", last: "3 days ago" }
+    ];
+
+    const table = document.getElementById("leadTable");
+
+    leadsData.forEach(lead => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${lead.name}</td>
+        <td>${lead.email}</td>
+        <td>${lead.score}</td>
+        <td>${lead.status}</td>
+        <td>${lead.last}</td>
+      `;
+      table.appendChild(row);
+    });
+
+    // Animated counters
+    function animateValue(id, start, end, duration) {
+      const obj = document.getElementById(id);
+      let startTime = null;
+
+      function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        obj.innerText = Math.floor(progress * (end - start) + start);
+        if (progress < 1) window.requestAnimationFrame(step);
+      }
+
+      window.requestAnimationFrame(step);
+    }
+
+    animateValue("totalLeads", 0, 14720, 1500);
+    animateValue("qualifiedLeads", 0, 9320, 1500);
+    animateValue("activeLeads", 0, 4250, 1500);
+  </script>
+</body>
+</html>
